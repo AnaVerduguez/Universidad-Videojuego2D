@@ -1,56 +1,60 @@
-# 🐱 Gato Travieso - Juego 2D en Primera Persona
+# 🐱 Gato Travieso - Juego de Plataformas 2D
 
-Un juego divertido donde controlás un gato travieso que debe tirar objetos de oficina para ganar puntos sin que lo vea su dueña programadora. Ambientado en un home office moderno.
+Un emocionante juego de plataformas con **hermoso fondo pixel art** donde controlás un adorable gato que debe saltar, correr y recolectar comida mientras evita obstáculos peligrosos. ¡Una aventura llena de acción gatuna con estilo retro!
 
 ## 🎮 Descripción del Juego
 
-En "Gato Travieso" controlás un gato desde una perspectiva 2D en primera persona en la oficina de una programadora. Los objetivos son:
-- **Tirar equipos tecnológicos** por toda la oficina para ganar puntos.
-- **Evitar ser visto** por tu dueña programadora cuando está trabajando.
-- **Personalizar tu gato** eligiendo entre diferentes colores.
-- **Conseguir la máxima puntuación** antes de ser descubierto.
+En "Gato Travieso" controlás un adorable **gato negro** en un desafiante mundo de plataformas 2D. El objetivo es simple pero desafiante:
+- **🎯 LLEGAR A 1000 PUNTOS para ganar** - ¡Ese es tu único objetivo!
+- **Saltar y esquivar obstáculos** para mantenerte con vida.
+- **Recolectar comida** (pollo, pescado, leche, pelotas) para sumar puntos.
+- **Sobrevivir hasta conseguir 1000 puntos** - Un solo golpe te elimina.
 
 ## ✨ Características
 
-### 🐾 Jugabilidad
-- **Movimiento en primera persona** con controles WASD.
-- **Sistema de detección** - la dueña aparece aleatoriamente.
-- **Mecánica de sigilo** - debés dejar de hacer travesuras cuando te esté mirando.
-- **Diferentes objetos tecnológicos** con distintos valores de puntuación:
-  - ✏️ Lapiceras (5 pts) - fáciles de tirar, hacen poco ruido.
-  - 📓 Cuadernos (10 pts) - esparcen hojas por todos lados.
-  - 🖱️ Mouse (15 pts) - se puede romper, valor medio.
-  - 👓 Caja de anteojos (20 pts) - frágil, la necesita para trabajar.
-  - 📱 Celular (25 pts) - muy valioso, se puede quebrar la pantalla.
-  - ⌨️ Teclado (30 pts) - hace mucho ruido al caer, caro.
-  - 🖥️ Monitor (35 pts) - muy frágil, carísimo, alto riesgo.
-  - 💻 Computadora (40 pts) - la más valiosa, deja sin trabajo a su dueña.
-  - 🧸 Peluche favorito (50 pts) - objeto especial, muy difícil de conseguir.
+### 🐾 Jugabilidad de Plataformas
+- **Movimiento de plataformas** con controles A/D y ESPACIO para saltar.
+- **Sistema de gravedad** - el gato cae y puede saltar solo en el suelo.
+- **Obstáculos peligrosos** - ¡evitarlos o será Game Over!
+- **Coleccionables de comida** con diferentes valores de puntuación:
+  - 🍗 **Pollo** (15 pts) - Comida nutritiva para gatos.
+  - 🐟 **Pescado** (20 pts) - ¡El favorito de los gatos! Mayor puntuación.
+  - 🥛 **Leche** (10 pts) - Bebida clásica para gatos.
+  - ⚽ **Pelotita** (5 pts) - Juguete divertido, puntuación baja.
 
-### 🎨 Sistema de Desbloqueos
-- **Empezás solo con**: ⚫ **Negro** (gato sigiloso)
-- **Desbloquear con puntos**:
-  - 🟠 Naranja (50 pts) - gato clásico travieso.
-  - ⚪ Blanco (100 pts) - angelical... aparentemente.
-  - 🟤 Marrón (200 pts) - gato de oficina veterano.
-    - 🩶 Gris (150 pts) - discreto en la oficina.
-  - 🎯 **Objetivos Especiales** (300+ pts) 
+### 🚧 Obstáculos Peligrosos  
+- 🐭 **Ratón** - ¡Ironía felina! Este ratón es peligroso.
+- 💧 **Charco de Agua** - Los gatos odian mojarse.
+- 📦 **Caja** - Obstáculos sólidos en el camino.
+- 🧹 **Escoba** - Herramientas de limpieza amenazantes.
 
+### 🏆 Objetivo del Juego
+- **🐱 Gato único**: Solo hay un adorable **gato negro** - sin colores desbloqueables
+- **🎯 Meta clara**: **¡Llegar a 1000 puntos para GANAR!**
+- **❌ Sin compras**: No hay sistema de tienda ni desbloqueos
+- **⚡ Pura habilidad**: Solo tú, el gato y el desafío de sobrevivir
 
-### 🎯 Mecánicas de Juego
-- **Sistema de puntuación** con bonus por rotura de objetos.
-- **Sistema de desbloqueos** - colores y objetivos con puntos acumulados.
-- **Detección inteligente** - la dueña aparece en momentos aleatorios.
-- **Advertencias visuales** cuando la dueña está cerca.
-- **Progresión de dificultad** - más objetos en habitaciones avanzadas.
-- **Objetivos especiales** - logros únicos para recompensar estrategias.
+### ⚡ Mecánicas de Juego Simplificadas
+- **Sistema de puntuación** directo - cada item suma puntos hacia los 1000.
+- **Spawn automático** - obstáculos y comida aparecen constantemente.
+- **Física realista** - gravedad, salto y colisiones precisas.
+- **Game Over inmediato** - una colisión reinicia tu progreso a 0.
+- **Victoria a los 1000** - ¡El juego termina cuando alcanzas la meta!
+- **Estadísticas de victoria** - tiempo total y items recolectados.
+
+### 🎨 Estilo Visual Pixel Art
+- **🌌 Fondo Dinámico**: Hermoso paisaje pixel art nocturno que se mueve con parallax
+- **🎯 Sin Deformación**: El fondo se escala inteligentemente sin distorsión
+- **🏗️ Plataformas Retro**: Diseño pixel con bordes y colores coherentes
+- **👾 Estética Unificada**: Todo mantiene el estilo pixel art nostálgico
 
 ## 🕹️ Controles
 
 | Acción | Tecla/Control |
 |--------|---------------|
-| Mover | `WASD` o `Flechas` |
-| Tirar objeto | `Clic izquierdo` o `Espacio` |
+| Mover Izquierda | `A` o `Flecha Izquierda` |
+| Mover Derecha | `D` o `Flecha Derecha` |
+| Saltar | `ESPACIO` |
 | Reiniciar juego | `R` |
 
 ## 🛠️ Instalación y Ejecución
@@ -90,10 +94,14 @@ Videojuego/
 ├── project.godot          # Configuración del proyecto Godot
 ├── Main.gd               # Script principal del juego
 ├── Player.gd             # Script del jugador (gato)
-├── Throwable.gd          # Script de objetos que se pueden tirar
-├── OwnerDetector.gd      # Sistema de detección de la dueña
+├── main.tscn             # Escena principal del juego
+├── player.tscn           # Escena del jugador
+├── Game Assets/          # Assets del juego (imágenes)
+│   ├── cat.jpg           # Sprite del gato
+│   └── wallpaper.jpg     # Fondo pixel art
 ├── README.md             # Este archivo
-└── CHANGELOG.md          # Registro de cambios
+├── CHANGELOG.md          # Registro de cambios
+└── GDD_Gato_Travieso.md  # Game Design Document
 ```
 
 ## 🎲 Cómo Jugar
