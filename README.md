@@ -97,8 +97,7 @@ Videojuego/
 ├── main.tscn             # Escena principal del juego
 ├── player.tscn           # Escena del jugador
 ├── Game Assets/          # Assets del juego (imágenes)
-│   ├── cat.jpg           # Sprite del gato
-│   └── wallpaper.jpg     # Fondo pixel art
+│   └── cat.jpg           # Sprite del gato
 ├── README.md             # Este archivo
 ├── CHANGELOG.md          # Registro de cambios
 └── GDD_Gato_Travieso.md  # Game Design Document

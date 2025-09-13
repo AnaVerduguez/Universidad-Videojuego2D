@@ -103,7 +103,7 @@ func show_game_intro():
 	print("")
 	print("🐾 Tu gato negro está listo para la aventura")
 	
-	set_cat_black_color()
+	set_cat_color_natural()
 
 func crear_fondo():
 	"""Crea y configura el fondo del juego"""
@@ -125,15 +125,9 @@ func crear_fondo():
 	var background_sprite = Sprite2D.new()
 	background_layer.add_child(background_sprite)
 	
-	# Cargar y configurar la imagen de fondo
-	var texture = load("res://Game Assets/wallpaper.jpg")
-	if texture:
-		background_sprite.texture = texture
-		configurar_fondo_escala(background_sprite, background_layer)
-		print("🖼️ Fondo pixel art cargado exitosamente")
-	else:
-		print("❌ Error: No se pudo cargar wallpaper.jpg")
-		crear_fondo_simple_fallback(background_sprite)
+	# Usar fondo de galaxia generado por código (más hermoso)
+	print("🌌 Creando fondo de galaxia...")
+	crear_fondo_simple_fallback(background_sprite)
 
 func configurar_fondo_escala(sprite: Sprite2D, layer: ParallaxLayer):
 	"""Configura la escala y posición del fondo"""
@@ -157,13 +151,51 @@ func configurar_fondo_escala(sprite: Sprite2D, layer: ParallaxLayer):
 	print("🎨 Fondo configurado - Escala: " + str(scale_factor))
 
 func crear_fondo_simple_fallback(sprite: Sprite2D):
-	"""Crear un fondo simple si falla la carga"""
+	"""Crear un hermoso fondo de galaxia"""
 	var image = Image.create(1024, 768, false, Image.FORMAT_RGBA8)
-	# Crear gradiente de cielo nocturno
+	
+	# Crear fondo base con gradiente galáctico
 	for y in range(768):
-		var color = Color.DARK_BLUE.lerp(Color.PURPLE, float(y) / 768.0)
 		for x in range(1024):
-			image.set_pixel(x, y, color)
+			var gradient_factor = float(y) / 768.0
+			var base_color = Color.DARK_BLUE.lerp(Color(0.1, 0.0, 0.3, 1.0), gradient_factor)
+			
+			# Añadir variación de nebulosa
+			var noise_x = float(x) / 100.0
+			var noise_y = float(y) / 100.0
+			var nebula_factor = sin(noise_x) * cos(noise_y) * 0.3 + 0.5
+			
+			var final_color = base_color.lerp(Color(0.3, 0.1, 0.5, 1.0), nebula_factor * 0.4)
+			image.set_pixel(x, y, final_color)
+	
+	# Añadir estrellas
+	for i in range(300):
+		var star_x = randi() % 1024
+		var star_y = randi() % 768
+		var star_brightness = randf_range(0.6, 1.0)
+		var star_color = Color(star_brightness, star_brightness, star_brightness, 1.0)
+		
+		# Estrella con brillo
+		image.set_pixel(star_x, star_y, star_color)
+		if star_x > 0: image.set_pixel(star_x - 1, star_y, star_color * 0.5)
+		if star_x < 1023: image.set_pixel(star_x + 1, star_y, star_color * 0.5)
+		if star_y > 0: image.set_pixel(star_x, star_y - 1, star_color * 0.5)
+		if star_y < 767: image.set_pixel(star_x, star_y + 1, star_color * 0.5)
+	
+	# Añadir algunas estrellas más grandes
+	for i in range(20):
+		var big_star_x = randi() % 1020
+		var big_star_y = randi() % 764
+		var brightness = randf_range(0.7, 1.0)
+		var star_color = Color(brightness, brightness, brightness * 0.9, 1.0)
+		
+		# Estrella de 3x3
+		for dy in range(-1, 2):
+			for dx in range(-1, 2):
+				var px = big_star_x + dx
+				var py = big_star_y + dy
+				if px >= 0 and px < 1024 and py >= 0 and py < 768:
+					image.set_pixel(px, py, star_color)
 	
 	var texture = ImageTexture.new()
 	texture.set_image(image)
@@ -171,11 +203,11 @@ func crear_fondo_simple_fallback(sprite: Sprite2D):
 	sprite.scale = Vector2(1, 1)
 	sprite.position = Vector2(512, 384)
 
-func set_cat_black_color():
-	"""Establece el gato con color negro - único color disponible"""
+func set_cat_color_natural():
+	"""Establece el gato con color natural para mostrar la imagen real"""
 	if player:
-		player.set_cat_color(Color.BLACK)
-		print("🐾 ¡Gato negro listo para saltar!")
+		player.set_cat_color(Color.WHITE)  # Blanco para mostrar colores naturales
+		print("🐾 ¡Gato con imagen real listo para saltar!")
 
 func crear_plataformas_iniciales():
 	"""Crea las plataformas básicas del juego que combinan con el fondo pixel"""
@@ -276,38 +308,29 @@ func spawn_random_collectible():
 	collectibles_container.add_child(collectible)
 
 func crear_obstaculo(tipo: String) -> RigidBody2D:
-	"""Crea un obstáculo que se mueve de derecha a izquierda"""
+	"""Crea un obstáculo hermoso que se mueve de derecha a izquierda"""
 	var obstacle = RigidBody2D.new()
-	obstacle.position = Vector2(1100, randf_range(500, 650))  # Aparece desde la derecha
-	obstacle.gravity_scale = 0  # Sin gravedad para que no caiga
+	obstacle.position = Vector2(1100, randf_range(500, 650))
+	obstacle.gravity_scale = 0
 	obstacle.set_meta("type", tipo)
 	obstacle.set_meta("is_obstacle", true)
 	
-	# Crear visual
-	var sprite = ColorRect.new()
-	sprite.size = Vector2(40, 40)
-	sprite.position = Vector2(-20, -20)
-	
-	match tipo:
-		"raton":
-			sprite.color = Color.GRAY
-		"charco":
-			sprite.color = Color.BLUE
-		"caja":
-			sprite.color = Color.SADDLE_BROWN
-		"escoba":
-			sprite.color = Color.YELLOW
-	
+	# Crear sprite con forma específica
+	var sprite = Sprite2D.new()
+	var image = crear_imagen_obstaculo(tipo)
+	var texture = ImageTexture.new()
+	texture.set_image(image)
+	sprite.texture = texture
 	obstacle.add_child(sprite)
 	
-	# Crear colisión
+	# Crear colisión apropiada
 	var collision = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
 	shape.size = Vector2(40, 40)
 	collision.shape = shape
 	obstacle.add_child(collision)
 	
-	# Añadir área para detectar colisión con jugador
+	# Añadir área para detectar colisión
 	var area = Area2D.new()
 	var area_collision = CollisionShape2D.new()
 	var area_shape = RectangleShape2D.new()
@@ -316,13 +339,103 @@ func crear_obstaculo(tipo: String) -> RigidBody2D:
 	area.add_child(area_collision)
 	obstacle.add_child(area)
 	
-	# Conectar señal de colisión
 	area.body_entered.connect(_on_obstacle_body_entered.bind(obstacle))
-	
-	# Aplicar velocidad hacia la izquierda
 	obstacle.linear_velocity = Vector2(-200 * game_speed, 0)
 	
 	return obstacle
+
+func crear_imagen_obstaculo(tipo: String) -> Image:
+	"""Crea imágenes específicas para cada tipo de obstáculo"""
+	var image = Image.create(40, 40, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	
+	match tipo:
+		"raton":
+			# Dibujar un ratón gris
+			# Cuerpo ovalado
+			for y in range(15, 30):
+				for x in range(5, 25):
+					var dx = float(x - 15)
+					var dy = float(y - 22)
+					if (dx * dx / 100.0 + dy * dy / 49.0) <= 1:
+						image.set_pixel(x, y, Color.GRAY)
+			
+			# Cabeza redonda
+			for y in range(12, 22):
+				for x in range(8, 18):
+					var dx = float(x - 13)
+					var dy = float(y - 17)
+					if (dx * dx + dy * dy) <= 25:
+						image.set_pixel(x, y, Color.GRAY)
+			
+			# Orejas redondas
+			for y in range(10, 15):
+				for x in range(10, 13):
+					var dx = x - 11.5
+					var dy = y - 12
+					if (dx * dx + dy * dy) <= 4:
+						image.set_pixel(x, y, Color.GRAY)
+			for y in range(10, 15):
+				for x in range(14, 17):
+					var dx = x - 15.5
+					var dy = y - 12
+					if (dx * dx + dy * dy) <= 4:
+						image.set_pixel(x, y, Color.GRAY)
+			
+			# Ojos negros
+			image.set_pixel(11, 16, Color.BLACK)
+			image.set_pixel(15, 16, Color.BLACK)
+			
+			# Cola larga
+			for x in range(25, 35):
+				var y = 22 + int((x - 25) * 0.3)
+				if y < 40: image.set_pixel(x, y, Color.GRAY)
+		
+		"charco":
+			# Dibujar charco de agua azul
+			for y in range(25, 35):
+				for x in range(5, 35):
+					var dx = float(x - 20)
+					var dy = float(y - 30)
+					var noise = sin(dx * 0.2) * cos(dy * 0.2)
+					if (dx * dx / 225.0 + dy * dy / 25.0 + noise * 0.1) <= 1:
+						image.set_pixel(x, y, Color.CYAN)
+						# Añadir brillos
+						if randf() < 0.3:
+							image.set_pixel(x, y, Color.LIGHT_CYAN)
+		
+		"caja":
+			# Dibujar caja marrón con detalles
+			# Caja principal
+			for y in range(10, 30):
+				for x in range(10, 30):
+					image.set_pixel(x, y, Color.SADDLE_BROWN)
+			
+			# Líneas de la caja
+			for x in range(10, 30):
+				image.set_pixel(x, 10, Color.BLACK)  # Línea superior
+				image.set_pixel(x, 29, Color.BLACK)  # Línea inferior
+				image.set_pixel(x, 19, Color.BLACK)  # Línea media
+			for y in range(10, 30):
+				image.set_pixel(10, y, Color.BLACK)  # Línea izquierda
+				image.set_pixel(29, y, Color.BLACK)  # Línea derecha
+				image.set_pixel(19, y, Color.BLACK)  # Línea media
+		
+		"escoba":
+			# Dibujar escoba vertical
+			# Mango marrón
+			for y in range(5, 35):
+				for x in range(18, 22):
+					image.set_pixel(x, y, Color.SADDLE_BROWN)
+			
+			# Cerdas amarillas
+			for y in range(30, 38):
+				for x in range(12, 28):
+					var distance_from_center = abs(x - 20)
+					if distance_from_center <= (38 - y) / 2:
+						image.set_pixel(x, y, Color.YELLOW)
+	
+	return image
 
 func crear_coleccionable(tipo: String) -> RigidBody2D:
 	"""Crea un coleccionable que se mueve de derecha a izquierda"""
@@ -440,35 +553,16 @@ func trigger_victory():
 	print("Tiempo jugado: " + str(round(game_time)) + " segundos")
 	print("Presiona R para jugar de nuevo")
 
-func next_room():
-	"""Avanza a la siguiente habitación de la oficina (nivel)"""
-	print("¡Has causado suficiente caos en esta parte de la oficina!")
-	print("Puntuación final: " + str(score) + " puntos")
-	
-	# En un juego completo, aquí se cargaría la siguiente área de la oficina
-	# Por ahora reiniciamos con más objetos tecnológicos
-	items_thrown = 0
-	max_items_per_room += 2
-	
-	# Limpiar objetos actuales y generar nuevos
-	for child in throwable_items.get_children():
-		child.queue_free()
-	
-	await get_tree().process_frame
-	spawn_throwable_items()
-	
-	print("¡Nueva área de la oficina! Ahora hay " + str(max_items_per_room) + " equipos para tirar.")
+# Función next_room eliminada - no se usa en el juego de plataformas
 
 func _on_game_over():
 	"""Maneja el fin del juego"""
 	game_active = false
-	print("¡GAME OVER! ¡La programadora te pilló tirando equipos!")
+	print("¡GAME OVER! ¡El gato chocó con un obstáculo!")
 	print("Puntuación de esta partida: " + str(score) + " puntos")
 	print("Puntuación total acumulada: " + str(total_score) + " puntos")
-	print("Objetos tirados: " + str(items_thrown))
-	
-	# Mostrar progreso hacia desbloqueos
-	show_unlock_progress()
+	print("Items recolectados: " + str(items_collected))
+	print("Tiempo jugado: " + str(round(game_time)) + " segundos")
 	
 	# Opción para reiniciar
 	print("Presiona R para reiniciar el juego")
@@ -485,31 +579,30 @@ func _on_score_changed(new_score: int):
 	print("Puntuación actual: " + str(new_score))
 
 func _input(event):
-	"""Maneja la entrada del jugador"""
-	if event.is_action_pressed("throw_item"):
-		if game_active:
-			var mouse_pos = get_global_mouse_position()
-			throw_item_at_position(mouse_pos)
-		elif not game_active and score == 0:
-			# Iniciar juego si no ha empezado
-			start_game()
-	
+	"""Maneja la entrada del jugador"""	
 	# Reiniciar juego
 	if event is InputEventKey and event.pressed and event.keycode == KEY_R:
 		if not game_active:
 			restart_game()
 
 func restart_game():
-	"""Reinicia el juego (manteniendo puntos totales y desbloqueos)"""
-	# Limpiar objetos actuales
-	for child in throwable_items.get_children():
-		child.queue_free()
+	"""Reinicia el juego manteniendo puntos totales"""
+	# Limpiar obstáculos y coleccionables existentes
+	if obstacles_container:
+		for child in obstacles_container.get_children():
+			child.queue_free()
+	if collectibles_container:
+		for child in collectibles_container.get_children():
+			child.queue_free()
 	
-	# Reiniciar variables de partida (NO los puntos totales ni desbloqueos)
+	# Reiniciar variables de partida
 	score = 0
+	items_collected = 0
+	obstacles_avoided = 0
+	game_time = 0.0
 	game_active = false
-	items_thrown = 0
-	max_items_per_room = 10
+	obstacle_timer = 0.0
+	collectible_timer = 0.0
 	
 	# Configurar nueva partida
 	setup_game()

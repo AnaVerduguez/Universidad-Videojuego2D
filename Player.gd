@@ -8,7 +8,7 @@ class_name Player
 @export var gravedad := 2000.0
 @export var friccion := 0.85
 
-var color_gato := Color.BLACK
+var color_gato := Color.WHITE
 var siendo_observado := false
 var puede_moverse := true
 var en_suelo := false
@@ -24,7 +24,6 @@ signal gato_colisiono_obstaculo()
 
 func _ready():
 	cargar_textura_gato_real()
-	actualizar_color_gato()
 	print("Player listo con textura del gato")
 
 func _physics_process(delta):
@@ -86,7 +85,8 @@ func _input(event):
 func set_cat_color(nuevo_color: Color):
 	color_gato = nuevo_color
 	cargar_textura_gato_real()  # Recarga la textura del gato
-	actualizar_color_gato()
+	# NO actualizar color para mantener la imagen original
+	# actualizar_color_gato()
 
 func actualizar_color_gato():
 	if sprite_gato:
@@ -114,21 +114,145 @@ func esta_moviendose() -> bool:
 	return velocity.length() > 10.0
 
 func cargar_textura_gato_real():
-	"""Carga la textura real del gato desde los Game Assets"""
+	"""Cargar la imagen real del gato desde cat.jpg"""
+	if not sprite_gato:
+		print("❌ Error: sprite_gato no está configurado")
+		return
+	
+	# Cargar directamente la imagen cat.jpg
+	print("🔍 Intentando cargar: res://Game Assets/cat.jpg")
+	var texture = load("res://Game Assets/cat.jpg")
+	if texture:
+		print("✅ Textura cargada: " + str(texture))
+		print("📏 Tamaño de imagen: " + str(texture.get_size()))
+		
+		sprite_gato.texture = texture
+		# Escala apropiada para que se vea bien
+		sprite_gato.scale = Vector2(0.2, 0.2)  # Aumentado un poco para mejor visibilidad
+		# Sin modulación de color para que se vea natural
+		sprite_gato.modulate = Color.WHITE
+		
+		print("🐾 Imagen cat.jpg aplicada al sprite exitosamente")
+		print("📐 Escala aplicada: " + str(sprite_gato.scale))
+	else:
+		print("❌ Error: No se pudo cargar cat.jpg, usando gato generado...")
+		# Fallback: crear gato por código
+		crear_gato_con_silueta()
+
+func crear_gato_con_silueta():
+	"""Crea un gato grande con silueta realista"""
 	if not sprite_gato:
 		return
 	
-	# Cargar la nueva imagen del gato en formato JPG
-	var texture = load("res://Game Assets/cat.jpg")
-	if texture:
-		sprite_gato.texture = texture
-		# Escalar adecuadamente para el juego - JPG puede necesitar diferente escala
-		sprite_gato.scale = Vector2(0.2, 0.2)  # Ajustado para la nueva imagen
-		print("Textura del gato JPG cargada exitosamente")
-	else:
-		print("Error: No se pudo cargar la textura del gato JPG")
-		# Fallback: crear un sprite simple
-		crear_sprite_simple_fallback()
+	# Crear imagen de 80x60 píxeles para un gato más grande
+	var image = Image.create(80, 60, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	
+	# === CUERPO PRINCIPAL DEL GATO ===
+	# Cuerpo ovalado más realista
+	for y in range(35, 55):
+		for x in range(25, 55):
+			var dx = float(x - 40)
+			var dy = float(y - 45)
+			if (dx * dx / 225.0 + dy * dy / 100.0) <= 1:
+				image.set_pixel(x, y, Color.BLACK)
+	
+	# === CABEZA REDONDA GRANDE ===
+	for y in range(15, 40):
+		for x in range(30, 50):
+			var dx = float(x - 40)
+			var dy = float(y - 27.5)
+			if (dx * dx + dy * dy) <= 156:
+				image.set_pixel(x, y, Color.BLACK)
+	
+	# === OREJAS TRIANGULARES GRANDES ===
+	# Oreja izquierda
+	for y in range(10, 25):
+		for x in range(25, 35):
+			var dx = x - 30
+			var dy = y - 10
+			if dx >= -5 and dy >= 0 and (dx + dy * 1.2) <= 10:
+				image.set_pixel(x, y, Color.BLACK)
+	
+	# Oreja derecha
+	for y in range(10, 25):
+		for x in range(45, 55):
+			var dx = 50 - x
+			var dy = y - 10
+			if dx >= -5 and dy >= 0 and (dx + dy * 1.2) <= 10:
+				image.set_pixel(x, y, Color.BLACK)
+	
+	# === OJOS BRILLANTES ===
+	# Ojo izquierdo
+	for y in range(22, 28):
+		for x in range(34, 38):
+			var dx = x - 36
+			var dy = y - 25
+			if (dx * dx + dy * dy) <= 4:
+				image.set_pixel(x, y, Color.YELLOW)
+	
+	# Ojo derecho
+	for y in range(22, 28):
+		for x in range(42, 46):
+			var dx = x - 44
+			var dy = y - 25
+			if (dx * dx + dy * dy) <= 4:
+				image.set_pixel(x, y, Color.YELLOW)
+	
+	# Pupilas
+	image.set_pixel(35, 25, Color.BLACK)
+	image.set_pixel(36, 25, Color.BLACK)
+	image.set_pixel(43, 25, Color.BLACK)
+	image.set_pixel(44, 25, Color.BLACK)
+	
+	# === NARIZ Y BOCA ===
+	# Nariz rosada
+	image.set_pixel(39, 30, Color.PINK)
+	image.set_pixel(40, 30, Color.PINK)
+	image.set_pixel(40, 31, Color.PINK)
+	
+	# Boca
+	image.set_pixel(38, 32, Color.BLACK)
+	image.set_pixel(41, 32, Color.BLACK)
+	image.set_pixel(37, 33, Color.BLACK)
+	image.set_pixel(42, 33, Color.BLACK)
+	
+	# === PATAS VISIBLES ===
+	# Patas delanteras
+	for y in range(50, 58):
+		for x in range(30, 34):
+			image.set_pixel(x, y, Color.BLACK)
+		for x in range(46, 50):
+			image.set_pixel(x, y, Color.BLACK)
+	
+	# === COLA CURVADA ===
+	# Dibujar cola más elegante
+	var cola_points = [
+		Vector2(55, 40), Vector2(60, 35), Vector2(65, 30),
+		Vector2(68, 25), Vector2(70, 20), Vector2(68, 15), Vector2(65, 12)
+	]
+	
+	for i in range(len(cola_points) - 1):
+		var start = cola_points[i]
+		var end = cola_points[i + 1]
+		for t in range(0, 10):
+			var pos = start.lerp(end, t / 9.0)
+			var px = int(pos.x)
+			var py = int(pos.y)
+			if px < 80 and py < 60 and px >= 0 and py >= 0:
+				image.set_pixel(px, py, Color.BLACK)
+				# Hacer cola más gruesa
+				if px + 1 < 80: image.set_pixel(px + 1, py, Color.BLACK)
+				if py + 1 < 60: image.set_pixel(px, py + 1, Color.BLACK)
+	
+	# Crear textura final
+	var texture = ImageTexture.new()
+	texture.set_image(image)
+	sprite_gato.texture = texture
+	
+	# Escala más grande para que se vea bien
+	sprite_gato.scale = Vector2(1.2, 1.2)
+	print("🐾 Gato con silueta creado exitosamente")
 
 func crear_sprite_simple_fallback():
 	"""Crea un sprite simple si no se puede cargar la textura"""

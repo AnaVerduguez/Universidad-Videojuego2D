@@ -152,9 +152,9 @@ R : Reiniciar Juego (tras Game Over)
 - **Animaciones:** Idle, caminar, saltar, caer
 
 #### 5.2.2 Fondo
-- **Archivo:** `wallpaper.jpg`
-- **Técnica:** Parallax Scrolling con repetición horizontal
-- **Escalado:** Inteligente sin deformación
+- **Generación:** Código procedural (galaxia con nebulosas y estrellas)
+- **Técnica:** Parallax Scrolling suave
+- **Estilo:** Galaxia nocturna con gradientes y estrellas brillantes
 - **Movimiento:** Sutil (0.02x velocidad del jugador)
 
 #### 5.2.3 Plataformas
@@ -379,7 +379,7 @@ Para llegar a 1000 puntos, ejemplos de combinaciones:
   - Game loop completo
 
 - **[DONE] Fase 3 - Arte e Integración** (Semana 1)
-  - Integración de assets (cat.jpg, wallpaper.jpg)
+  - Integración de assets (cat.jpg) y fondo procedural
   - Parallax scrolling background
   - UI básica funcional
 
@@ -438,7 +438,7 @@ Para llegar a 1000 puntos, ejemplos de combinaciones:
 
 ### B. Asset List Completo
 - `cat.jpg` - Sprite principal del protagonista
-- `wallpaper.jpg` - Fondo pixel art nocturno
+- Fondo de galaxia generado por código procedural
 - `project.godot` - Configuración del proyecto
 - Scripts: `Main.gd`, `Player.gd`
 - Escenas: `main.tscn`, `player.tscn`
