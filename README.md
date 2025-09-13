@@ -1,6 +1,6 @@
 # 🐱 Gato Travieso - Juego de Plataformas 2D
 
-Un emocionante juego de plataformas con **hermoso fondo pixel art** donde controlás un adorable gato que debe saltar, correr y recolectar comida mientras evita obstáculos peligrosos. ¡Una aventura llena de acción gatuna con estilo retro!
+Un emocionante juego de plataformas con **hermoso fondo de bosque pixel art multicapa** donde controlás un adorable gato que debe saltar, correr y recolectar comida mientras evita obstáculos peligrosos. ¡Una aventura llena de acción gatuna en un místico bosque con parallax professional!
 
 ## 🎮 Descripción del Juego
 
@@ -43,10 +43,11 @@ En "Gato Travieso" controlás un adorable **gato negro** en un desafiante mundo 
 - **Estadísticas de victoria** - tiempo total y items recolectados.
 
 ### 🎨 Estilo Visual Pixel Art
-- **🌌 Fondo Dinámico**: Hermoso paisaje pixel art nocturno que se mueve con parallax
-- **🎯 Sin Deformación**: El fondo se escala inteligentemente sin distorsión
-- **🏗️ Plataformas Retro**: Diseño pixel con bordes y colores coherentes
-- **👾 Estética Unificada**: Todo mantiene el estilo pixel art nostálgico
+- **🌲 Fondo de Bosque**: 12 capas parallax profesionales con profundidad atmosférica
+- **✨ Efectos de Luz**: Capas especiales de luces y partículas atmosféricas
+- **🎯 Sin Deformación**: Cada capa se escala manteniendo proporciones originales
+- **🏗️ Plataformas Temáticas**: Colores tierra, musgo y madera que combinan con el bosque
+- **👾 Estética Unificada**: Arte profesional de Eder Muniz con estilo cohesivo
 
 ## 🕹️ Controles
 

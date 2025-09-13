@@ -29,7 +29,7 @@
 ## 1. RESUMEN EJECUTIVO
 
 ### 1.1 Visión del Juego
-**"Gato Travieso"** es un juego de plataformas 2D estilo runner infinito con estética pixel art nostálgica. El jugador controla un adorable gato negro que debe sobrevivir esquivando obstáculos y recolectando comida para alcanzar exactamente 1000 puntos y ganar el juego.
+**"Gato Travieso"** es un juego de plataformas 2D estilo runner infinito con hermoso fondo de bosque pixel art multicapa. El jugador controla un adorable gato negro que debe sobrevivir esquivando obstáculos y recolectando comida en un místico bosque con parallax professional para alcanzar exactamente 1000 puntos y ganar el juego.
 
 ### 1.2 Público Objetivo
 - **Primario:** Jugadores casuales de 8-35 años
@@ -151,19 +151,23 @@ R : Reiniciar Juego (tras Game Over)
 - **Color:** Negro con modulación dinámica
 - **Animaciones:** Idle, caminar, saltar, caer
 
-#### 5.2.2 Fondo
-- **Generación:** Código procedural (galaxia con nebulosas y estrellas)
-- **Técnica:** Parallax Scrolling suave
-- **Estilo:** Galaxia nocturna con gradientes y estrellas brillantes
-- **Movimiento:** Sutil (0.02x velocidad del jugador)
+#### 5.2.2 Fondo de Bosque Multicapa
+- **Arte:** Assets profesionales de Eder Muniz - "Free Pixel Art Forest"
+- **Técnica:** Parallax Scrolling multicapa (12 capas independientes)
+- **Estilo:** Bosque místico pixel art con profundidad atmosférica
+- **Capas:** Desde cielo (0.1x velocidad) hasta primer plano (1.0x velocidad)
+- **Efectos especiales:** 2 capas dedicadas a luces y partículas atmosféricas
+- **Resolución:** 928x793 píxeles por capa, escalado inteligente
+- **Repetición:** Horizontal infinita con `motion_mirroring`
+- **Movimiento:** Diferencial según distancia (0.02x velocidad del jugador)
 
-#### 5.2.3 Plataformas
-- **Estilo:** ColorRect con bordes pixel art
-- **Colores:** 
-  - Suelo: Marrón tierra (0.4, 0.2, 0.1)
-  - Plataforma 1: Verde césped (0.3, 0.6, 0.2)
-  - Plataforma 2: Gris piedra (0.5, 0.5, 0.5)
-  - Plataforma 3: Verde oscuro (0.2, 0.4, 0.1)
+#### 5.2.3 Plataformas Temáticas del Bosque
+- **Estilo:** ColorRect con bordes pixel art temáticos
+- **Colores del Bosque:** 
+  - Suelo: Tierra del bosque (0.3, 0.2, 0.1)
+  - Plataforma 1: Verde musgo (0.2, 0.4, 0.1)
+  - Plataforma 2: Marrón tronco (0.4, 0.3, 0.2)
+  - Plataforma 3: Verde hoja oscuro (0.15, 0.3, 0.08)
 
 #### 5.2.4 UI Elements
 - **Fuente:** Monospace pixel-perfect
@@ -437,8 +441,25 @@ Para llegar a 1000 puntos, ejemplos de combinaciones:
 - **GPU:** Cualquier GPU moderna (integrada compatible)
 
 ### B. Asset List Completo
+**Sprites:**
 - `cat.jpg` - Sprite principal del protagonista
-- Fondo de galaxia generado por código procedural
+
+**Fondo Multicapa (Free Pixel Art Forest - Eder Muniz):**
+- `Background layers/Layer_0000_9.png` - Primer plano
+- `Background layers/Layer_0001_8.png` - Elementos cercanos  
+- `Background layers/Layer_0002_7.png` - Follaje primer plano
+- `Background layers/Layer_0003_6.png` - Árboles cercanos
+- `Background layers/Layer_0004_Lights.png` - Partículas de luz
+- `Background layers/Layer_0005_5.png` - Vegetación densa
+- `Background layers/Layer_0006_4.png` - Árboles medios
+- `Background layers/Layer_0007_Lights.png` - Luces atmosféricas
+- `Background layers/Layer_0008_3.png` - Bosque medio
+- `Background layers/Layer_0009_2.png` - Árboles fondo
+- `Background layers/Layer_0010_1.png` - Montañas lejanas
+- `Background layers/Layer_0011_0.png` - Cielo
+- `Background.png` - Preview completo
+
+**Código:**
 - `project.godot` - Configuración del proyecto
 - Scripts: `Main.gd`, `Player.gd`
 - Escenas: `main.tscn`, `player.tscn`

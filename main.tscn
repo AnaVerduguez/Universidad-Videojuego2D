@@ -7,7 +7,7 @@
 script = ExtResource("1_ig7tw")
 
 [node name="Player" parent="." instance=ExtResource("2_0xm2m")]
-position = Vector2(400, 300)
+position = Vector2(400, 500)
 
 [node name="ThrowableItems" type="Node2D" parent="."]
 

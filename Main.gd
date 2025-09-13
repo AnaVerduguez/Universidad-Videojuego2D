@@ -106,7 +106,7 @@ func show_game_intro():
 	set_cat_color_natural()
 
 func crear_fondo():
-	"""Crea y configura el fondo del juego"""
+	"""Crea y configura el fondo de bosque pixel art con múltiples capas parallax"""
 	# Crear el fondo manualmente usando ParallaxBackground
 	game_background = ParallaxBackground.new()
 	add_child(game_background)
@@ -116,92 +116,109 @@ func crear_fondo():
 	# Configurar el parallax background
 	game_background.scroll_ignore_camera_zoom = false
 	
-	# Crear la capa de parallax
-	var background_layer = ParallaxLayer.new()
-	background_layer.motion_scale = Vector2(0.5, 0.8)  # Velocidad del parallax
-	game_background.add_child(background_layer)
+	print("🌲 Creando fondo de bosque pixel art con parallax multicapa...")
 	
-	# Crear el sprite del fondo
-	var background_sprite = Sprite2D.new()
-	background_layer.add_child(background_sprite)
+	# TEST: Solo una capa para debuggear
+	print("🔧 MODO DEBUG: Solo cargando una capa para probar")
+	crear_capa_bosque("Layer_0011_0.png", Vector2(0.1, 0.0), "Cielo")
 	
-	# Usar fondo de galaxia generado por código (más hermoso)
-	print("🌌 Creando fondo de galaxia...")
-	crear_fondo_simple_fallback(background_sprite)
+	# CÓDIGO COMPLETO COMENTADO TEMPORALMENTE
+	# # Definir las capas del bosque con sus velocidades de parallax (SIMPLIFICADO para debug)
+	# # Empezamos con menos capas para debuggear
+	# var forest_layers = [
+	# 	{"file": "Layer_0011_0.png", "speed": Vector2(0.1, 0.0), "name": "Cielo"},
+	# 	{"file": "Layer_0010_1.png", "speed": Vector2(0.2, 0.0), "name": "Montañas lejanas"},
+	# 	{"file": "Layer_0009_2.png", "speed": Vector2(0.3, 0.0), "name": "Árboles fondo"},
+	# 	{"file": "Layer_0008_3.png", "speed": Vector2(0.4, 0.0), "name": "Bosque medio"},
+	# 	{"file": "Layer_0006_4.png", "speed": Vector2(0.5, 0.0), "name": "Árboles medios"},
+	# 	{"file": "Layer_0003_6.png", "speed": Vector2(0.7, 0.0), "name": "Árboles cercanos"},
+	# 	{"file": "Layer_0000_9.png", "speed": Vector2(1.0, 0.0), "name": "Primer plano"}
+	# ]
+	
+	# # Crear cada capa de parallax
+	# for layer_data in forest_layers:
+	# 	crear_capa_bosque(layer_data.file, layer_data.speed, layer_data.name)
 
-func configurar_fondo_escala(sprite: Sprite2D, layer: ParallaxLayer):
-	"""Configura la escala y posición del fondo"""
+
+func crear_capa_bosque(archivo: String, velocidad_parallax: Vector2, nombre_capa: String):
+	"""Crea una capa individual del fondo de bosque"""
+	print("🌿 Creando capa: " + nombre_capa + " (" + archivo + ")")
+	
+	# Crear la capa de parallax
+	var parallax_layer = ParallaxLayer.new()
+	parallax_layer.motion_scale = velocidad_parallax
+	game_background.add_child(parallax_layer)
+	
+	# Crear el sprite para esta capa
+	var layer_sprite = Sprite2D.new()
+	parallax_layer.add_child(layer_sprite)
+	
+	# Cargar la imagen de la capa
+	var ruta_imagen = "res://Game Assets/Background layers/" + archivo
+	print("📁 Cargando: " + ruta_imagen)
+	
+	var texture = load(ruta_imagen)
+	if texture:
+		layer_sprite.texture = texture
+		print("✅ Textura cargada: " + str(texture.get_size()))
+		
+		# Configurar posición y escala
+		configurar_capa_bosque(layer_sprite, parallax_layer)
+	else:
+		print("❌ Error: No se pudo cargar " + archivo)
+		# Crear un color de debug para identificar la capa
+		crear_capa_debug(layer_sprite, parallax_layer, nombre_capa)
+
+func configurar_capa_bosque(sprite: Sprite2D, layer: ParallaxLayer):
+	"""Configura la escala y posición de una capa del bosque"""
 	var screen_size = get_viewport().get_visible_rect().size
 	var texture_size = sprite.texture.get_size()
 	
 	# Calcular escala para cubrir toda la pantalla sin deformar
 	var scale_x = screen_size.x / texture_size.x
 	var scale_y = screen_size.y / texture_size.y
-	var scale_factor = max(scale_x, scale_y) # Usar el mayor para cubrir toda la pantalla
+	var scale_factor = max(scale_x, scale_y)  # Usar la escala mayor para cubrir toda la pantalla
 	
 	# Aplicar escala
 	sprite.scale = Vector2(scale_factor, scale_factor)
 	
-	# Centrar el fondo
+	# Posicionar el sprite correctamente
 	sprite.position = Vector2(screen_size.x / 2, screen_size.y / 2)
 	
 	# Configurar repetición horizontal para parallax infinito
-	layer.motion_mirroring = Vector2(texture_size.x * scale_factor, 0)
+	var repeat_width = texture_size.x * scale_factor
+	layer.motion_mirroring = Vector2(repeat_width, 0)
 	
-	print("🎨 Fondo configurado - Escala: " + str(scale_factor))
+	print("🎨 Capa configurada - Tamaño: " + str(texture_size) + " | Escala: " + str(scale_factor) + " | Repetición: " + str(repeat_width))
 
-func crear_fondo_simple_fallback(sprite: Sprite2D):
-	"""Crear un hermoso fondo de galaxia"""
-	var image = Image.create(1024, 768, false, Image.FORMAT_RGBA8)
+func crear_capa_debug(sprite: Sprite2D, layer: ParallaxLayer, nombre: String):
+	"""Crear una capa de color sólido para debug si no se carga la textura"""
+	var screen_size = get_viewport().get_visible_rect().size
 	
-	# Crear fondo base con gradiente galáctico
-	for y in range(768):
-		for x in range(1024):
-			var gradient_factor = float(y) / 768.0
-			var base_color = Color.DARK_BLUE.lerp(Color(0.1, 0.0, 0.3, 1.0), gradient_factor)
-			
-			# Añadir variación de nebulosa
-			var noise_x = float(x) / 100.0
-			var noise_y = float(y) / 100.0
-			var nebula_factor = sin(noise_x) * cos(noise_y) * 0.3 + 0.5
-			
-			var final_color = base_color.lerp(Color(0.3, 0.1, 0.5, 1.0), nebula_factor * 0.4)
-			image.set_pixel(x, y, final_color)
+	# Crear imagen de debug
+	var debug_image = Image.create(screen_size.x, screen_size.y, false, Image.FORMAT_RGBA8)
 	
-	# Añadir estrellas
-	for i in range(300):
-		var star_x = randi() % 1024
-		var star_y = randi() % 768
-		var star_brightness = randf_range(0.6, 1.0)
-		var star_color = Color(star_brightness, star_brightness, star_brightness, 1.0)
-		
-		# Estrella con brillo
-		image.set_pixel(star_x, star_y, star_color)
-		if star_x > 0: image.set_pixel(star_x - 1, star_y, star_color * 0.5)
-		if star_x < 1023: image.set_pixel(star_x + 1, star_y, star_color * 0.5)
-		if star_y > 0: image.set_pixel(star_x, star_y - 1, star_color * 0.5)
-		if star_y < 767: image.set_pixel(star_x, star_y + 1, star_color * 0.5)
+	# Colores de debug según la capa
+	var color_debug = Color.TRANSPARENT
+	if "Cielo" in nombre:
+		color_debug = Color(0.5, 0.7, 1.0, 0.3)  # Azul claro
+	elif "Montañas" in nombre:
+		color_debug = Color(0.6, 0.6, 0.7, 0.4)  # Gris azulado
+	elif "Árboles" in nombre:
+		color_debug = Color(0.2, 0.4, 0.1, 0.5)  # Verde
+	else:
+		color_debug = Color(0.5, 0.3, 0.2, 0.3)  # Marrón
 	
-	# Añadir algunas estrellas más grandes
-	for i in range(20):
-		var big_star_x = randi() % 1020
-		var big_star_y = randi() % 764
-		var brightness = randf_range(0.7, 1.0)
-		var star_color = Color(brightness, brightness, brightness * 0.9, 1.0)
-		
-		# Estrella de 3x3
-		for dy in range(-1, 2):
-			for dx in range(-1, 2):
-				var px = big_star_x + dx
-				var py = big_star_y + dy
-				if px >= 0 and px < 1024 and py >= 0 and py < 768:
-					image.set_pixel(px, py, star_color)
+	# Rellenar con color
+	debug_image.fill(color_debug)
 	
-	var texture = ImageTexture.new()
-	texture.set_image(image)
-	sprite.texture = texture
-	sprite.scale = Vector2(1, 1)
-	sprite.position = Vector2(512, 384)
+	# Crear textura y aplicar
+	var debug_texture = ImageTexture.new()
+	debug_texture.set_image(debug_image)
+	sprite.texture = debug_texture
+	sprite.position = Vector2(screen_size.x / 2, screen_size.y / 2)
+	
+	print("🔧 Capa DEBUG creada: " + nombre)
 
 func set_cat_color_natural():
 	"""Establece el gato con color natural para mostrar la imagen real"""
@@ -210,23 +227,27 @@ func set_cat_color_natural():
 		print("🐾 ¡Gato con imagen real listo para saltar!")
 
 func crear_plataformas_iniciales():
-	"""Crea las plataformas básicas del juego que combinan con el fondo pixel"""
+	"""Crea las plataformas básicas que combinan con el fondo de bosque"""
 	if not platforms_container:
 		return
 	
-	# Crear suelo principal - color marrón tierra que combina con el pixel art
-	var suelo = crear_plataforma(Vector2(512, 700), Vector2(1024, 100), Color(0.4, 0.2, 0.1, 1.0))
+	# TEMPORALMENTE DESHABILITADO - Crear suelo principal más arriba para que el gato sea visible
+	# var suelo = crear_plataforma(Vector2(512, 600), Vector2(1024, 100), Color(0.3, 0.2, 0.1, 1.0))
+	# platforms_container.add_child(suelo)
+	
+	# Crear suelo invisible para physics pero que no interfiera visualmente
+	var suelo = crear_plataforma(Vector2(512, 600), Vector2(1024, 50), Color(1.0, 1.0, 1.0, 0.0))  # Transparente
 	platforms_container.add_child(suelo)
 	
-	# Crear plataformas flotantes - colores que combinan con el estilo pixel
-	var plat1 = crear_plataforma(Vector2(200, 600), Vector2(150, 20), Color(0.3, 0.6, 0.2, 1.0))  # Verde césped
-	platforms_container.add_child(plat1)
+	# TEMPORALMENTE DESHABILITADAS - plataformas flotantes
+	# var plat1 = crear_plataforma(Vector2(200, 500), Vector2(150, 20), Color(0.2, 0.4, 0.1, 1.0))  # Verde musgo
+	# platforms_container.add_child(plat1)
 	
-	var plat2 = crear_plataforma(Vector2(500, 500), Vector2(150, 20), Color(0.5, 0.5, 0.5, 1.0))  # Gris piedra
-	platforms_container.add_child(plat2)
+	# var plat2 = crear_plataforma(Vector2(500, 400), Vector2(150, 20), Color(0.4, 0.3, 0.2, 1.0))  # Marrón tronco
+	# platforms_container.add_child(plat2)
 	
-	var plat3 = crear_plataforma(Vector2(800, 400), Vector2(150, 20), Color(0.2, 0.4, 0.1, 1.0))  # Verde oscuro
-	platforms_container.add_child(plat3)
+	# var plat3 = crear_plataforma(Vector2(800, 300), Vector2(150, 20), Color(0.15, 0.3, 0.08, 1.0))  # Verde hoja oscuro
+	# platforms_container.add_child(plat3)
 
 func crear_plataforma(posicion: Vector2, tamaño: Vector2, color: Color) -> StaticBody2D:
 	"""Crea una plataforma física con estilo pixel art"""
@@ -270,20 +291,20 @@ func _process(delta):
 	# Actualizar parallax scrolling basado en el movimiento del jugador
 	if game_background and player:
 		# El fondo se mueve sutilmente con el jugador para efecto de profundidad
-		var parallax_offset = -player.velocity * 0.02  # Muy sutil para no marearse
+		var parallax_offset = -player.velocity * delta * 0.5  # Más controlado
 		game_background.scroll_offset += parallax_offset
 	
-	# Spawns de obstáculos
-	obstacle_timer += delta
-	if obstacle_timer >= obstacle_spawn_rate:
-		spawn_random_obstacle()
-		obstacle_timer = 0.0
+	# TEMPORALMENTE DESHABILITADO - Spawns de obstáculos
+	# obstacle_timer += delta
+	# if obstacle_timer >= obstacle_spawn_rate:
+	#	spawn_random_obstacle()
+	#	obstacle_timer = 0.0
 	
-	# Spawns de coleccionables
-	collectible_timer += delta  
-	if collectible_timer >= collectible_spawn_rate:
-		spawn_random_collectible()
-		collectible_timer = 0.0
+	# TEMPORALMENTE DESHABILITADO - Spawns de coleccionables
+	# collectible_timer += delta  
+	# if collectible_timer >= collectible_spawn_rate:
+	#	spawn_random_collectible()
+	#	collectible_timer = 0.0
 
 func spawn_random_obstacle():
 	"""Genera un obstáculo aleatorio"""
